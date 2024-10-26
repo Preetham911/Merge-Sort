@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge Sort Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #output {
+            margin-top: 20px;
+        }
+        .step {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Merge Sort Visualization</h1>
+    <label for="numbers">Enter numbers separated by commas:</label>
+    <input type="text" id="numbers" placeholder="e.g. 3,1,4,1,5,9,2,6,5">
+    <button onclick="sortNumbers()">Sort</button>
+    <div id="output"></div>
+
+    <script>
+        function merge(left, right) {
+            let result = [];
+            let leftIndex = 0;
+            let rightIndex = 0;
+
+            while (leftIndex < left.length && rightIndex < right.length) {
+                if (left[leftIndex] < right[rightIndex]) {
+                    result.push(left[leftIndex]);
+                    leftIndex++;
+                } else {
+                    result.push(right[rightIndex]);
+                    rightIndex++;
+                }
+            }
+
+            return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+        }
+
+        function sortNumbers() {
+            const input = document.getElementById('numbers').value;
+            const numbers = input.split(',').map(Number);
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '';
+
+            const sortedNumbers = mergeSortWithSteps(numbers, outputDiv);
+            outputDiv.innerHTML += `<div class="step">Sorted Array: ${sortedNumbers.join(', ')}</div>`;
+        }
+
+        function mergeSortWithSteps(arr, outputDiv) {
+            if (arr.length <= 1) {
+                return arr;
+            }
+            const mid = Math.floor(arr.length / 2);
+            const left = arr.slice(0, mid);
+            const right = arr.slice(mid);
+
+            outputDiv.innerHTML += `<div class="step">Splitting: ${arr.join(', ')}</div>`;
+
+            const sortedLeft = mergeSortWithSteps(left, outputDiv);
+            const sortedRight = mergeSortWithSteps(right, outputDiv);
+
+            const merged = merge(sortedLeft, sortedRight);
+            outputDiv.innerHTML += `<div class="step">Merging: ${merged.join(', ')}</div>`;
+
+            return merged;
+        }
+    </script>
+</body>
+</html>
+<style>
+    body {
+        background-color: #f0f8ff;
+        color: #333;
+    }
+    h1 {
+        color: #2c3e50;
+    }
+    label {
+        font-weight: bold;
+    }
+    input[type="text"] {
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100%;
+        max-width: 400px;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #2980b9;
+    }
+    #output {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #ecf0f1;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+    }
+    .step {
+        padding: 5px;
+        border-bottom: 1px solid #bdc3c7;
+    }
+    .step:last-child {
+        border-bottom: none;
+    }
+</style>
